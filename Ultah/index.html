@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kirim Pesan Rahasia</title>
+</head>
+<body>
+    <h2>Tulis Pesan Rahasiamu</h2>
+    <textarea id="message" rows="5" cols="30"></textarea><br>
+    
+    <h3>Tambahkan File (Gambar atau Musik)</h3>
+    <input type="file" id="fileInput"><br><br>
+    
+    <button onclick="saveMessage()">Buat Link</button>
+
+    <h3>Link Pesan:</h3>
+    <p id="linkResult"></p>
+
+    <script>
+        function saveMessage() {
+            const message = document.getElementById("message").value;
+            const fileInput = document.getElementById("fileInput");
+            const file = fileInput.files[0];
+
+            if (!message && !file) {
+                alert("Tulis pesan atau pilih file dulu!");
+                return;
+            }
+
+            const encodedMessage = encodeURIComponent(message);
+            const uniqueID = Math.random().toString(36).substring(7);
+            let fileURL = "";
+
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    fileURL = event.target.result;
+                    saveToLocalStorage(uniqueID, encodedMessage, fileURL);
+                };
+                reader.readAsDataURL(file);
+            } else {
+                saveToLocalStorage(uniqueID, encodedMessage, fileURL);
+            }
+        }
+
+        func

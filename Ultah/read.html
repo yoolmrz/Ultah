@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Baca Pesan Rahasia</title>
+</head>
+<body>
+    <h2>Pesan Rahasiamu:</h2>
+    <p id="displayMessage">Memuat pesan...</p>
+    
+    <h3>File yang Dikirim:</h3>
+    <p id="fileDisplay"></p>
+
+    <script>
+        function getParameterByName(name) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(name);
+        }
+
+        const messageID = getParameterByName('id');
+        const storedData = localStorage.getItem(messageID);
+
+        if (storedData) {
+            const { message, fileURL } = JSON.parse(storedData);
+            document.getElementById("displayMessage").textContent = decodeURIComponent(message);
+
+            if (fileURL) {
+                const fileDisplay = document.getElementById("fileDisplay");
+                if (fileURL.startsWith("data:image")) {
+                    fileDisplay.innerHTML = `<img src="${fileURL}" width="300">`;
+                } else if (fileURL.startsWith("data:audio")) {
+                    fileDisplay.innerHTML = `<audio controls><source src="${fileURL}" type="audio/mpeg"></audio>`;
+                } else {
+                    fileDisplay.innerHTML = `<a href="${fileURL}" download>Download File</a>`;
+                }
+            }
+        } else {
+            document.getElementById("displayMessage").textContent = "Pesan tidak ditemukan!";
+        }
+    </script>
+</body>
+</html>
